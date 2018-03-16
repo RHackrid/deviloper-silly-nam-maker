@@ -24,6 +24,24 @@ class SillyNameMakerSkill(MycroftSkill):
         # Initialize working variables used within the skill.
         self.count = 0
 
+	@intent_handler(IntentBuilder("SillyNameMakerIntent").require("SillyNameMakerStart").build())
+    @adds_context('SillyNameMakerContext')
+    def handle_silly_name_maker_start(self, message):
+        self.speak('Hi! Welcome to Silly Name Maker! Lets get started. What is your lucky number?',  expect_response=True)
+		
+    @intent_handler(IntentBuilder("ColorIntent").require("Color").require("SillyNameMakerContext").build())
+    @adds_context('ColorContext')
+    def handle_first_number(self, message):
+        self.color = message.data.get("Color")
+        self.speak('What is your favorite color?', expect_response=True)
+        print(self.color)
+		
+    @intent_handler(IntentBuilder("NumberIntent").require("Number").require("ColorContext").build())
+    def handle_first_number(self, message):
+        self.number = message.data.get("Number")
+        self.speak('Alright, your silly name is {} {}! I hope you like it. See you next time.'.format(self.color, self.number), expect_response=False)
+        print(self.number)
+		
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
     # pieces, and is triggered when the user's utterance matches the pattern
