@@ -40,7 +40,7 @@ class SillyNameMakerSkill(MycroftSkill):
         # In this case, respond by simply speaking a canned response.
         # Mycroft will randomly speak one of the lines from the file
         #    dialogs/en-us/hello.world.dialog
-        self.speak_dialog("silly.name.is", data={"color": self.color, "number": self.number})
+        self.speak_dialog("silly.name.is", data={"color": message.data["Color"], "number": message.data["Number"]})
 
     @intent_handler(IntentBuilder("").require("Count").require("Dir"))
     def handle_count_intent(self, message):
