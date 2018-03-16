@@ -1,83 +1,58 @@
-# TODO: Add an appropriate license to your skill before publishing.  See
-# the LICENSE file for more information.
-
-# Below is the list of outside modules you'll be using in your skill.
-# They might be built-in to Python, from mycroft-core or from external
-# libraries.  If you use an external library, be sure to include it
-# in the requirements.txt file so the library is installed properly
-# when the skill gets installed later by a user.
+# The MIT License (MIT)	
+# 
+# Copyright (c) 2018 RHackrid
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
+from mycroft.skills.context import *
 
-# Each skill is contained within its own class, which inherits base methods
-# from the MycroftSkill class.  You extend this class as shown below.
-
-# TODO: Change "Template" to a unique name for your skill
 class SillyNameMakerSkill(MycroftSkill):
 
-    # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(SillyNameMakerSkill, self).__init__(name="SillyNameMakerSkill")
-        
-        # Initialize working variables used within the skill.
-        self.count = 0
 
-	@intent_handler(IntentBuilder("SillyNameMakerIntent").require("SillyNameMakerStart").build())
+    @intent_handler(IntentBuilder("SillyNameMakerIntent").require("SillyNameMakerStart").build())
     @adds_context('SillyNameMakerContext')
     def handle_silly_name_maker_start(self, message):
-        self.speak('Hi! Welcome to Silly Name Maker! Lets get started. What is your lucky number?',  expect_response=True)
+        self.speak('Hi! Welcome to Silly Name Maker! Lets get started. What is your lucky number?', expect_response=True)
 		
-    @intent_handler(IntentBuilder("ColorIntent").require("Color").require("SillyNameMakerContext").build())
-    @adds_context('ColorContext')
-    def handle_first_number(self, message):
-        self.color = message.data.get("Color")
+    @intent_handler(IntentBuilder("NumberIntent").require("LuckyNumber").require("SillyNameMakerContext").build())
+    @adds_context('NumberContext')
+    def handle_number(self, message):
+        self.number = message.data.get("LuckyNumber")
         self.speak('What is your favorite color?', expect_response=True)
-        print(self.color)
-		
-    @intent_handler(IntentBuilder("NumberIntent").require("Number").require("ColorContext").build())
-    def handle_first_number(self, message):
-        self.number = message.data.get("Number")
-        self.speak('Alright, your silly name is {} {}! I hope you like it. See you next time.'.format(self.color, self.number), expect_response=False)
         print(self.number)
-		
-    # The "handle_xxxx_intent" function is triggered by Mycroft when the
-    # skill's intent is matched.  The intent is defined by the IntentBuilder()
-    # pieces, and is triggered when the user's utterance matches the pattern
-    # defined by the keywords.  In this case, the match occurs when one word
-    # is found from each of the files:
-    #    vocab/en-us/Hello.voc
-    #    vocab/en-us/World.voc
-    # In this example that means it would match on utterances like:
-    #   'Hello world'
-    #   'Howdy you great big world'
-    #   'Greetings planet earth'
-    @intent_handler(IntentBuilder("").require("Color").require("Number"))
-    def handle_silly_name_intent(self, message):
-        # In this case, respond by simply speaking a canned response.
-        # Mycroft will randomly speak one of the lines from the file
-        #    dialogs/en-us/hello.world.dialog
-        self.speak_dialog("silly.name.is", data={"color": message.data["Color"], "number": message.data["Number"]})
 
-    @intent_handler(IntentBuilder("").require("Count").require("Dir"))
-    def handle_count_intent(self, message):
-        if message.data["Dir"] == "up":
-            self.count += 1
-        else:  # assume "down"
-            self.count -= 1
-        self.speak_dialog("count.is.now", data={"count": self.count})
+    @intent_handler(IntentBuilder("ColorIntent").require("FavoriteColor").require("NumberContext").build())
+    @removes_context('NumberContext')
+    def handle_color(self, message):
+        self.color = message.data.get("FavoriteColor")
+        self.speak('Alright, your silly name is {} {}! I hope you like it. See you next time.'.format(self.color, self.number), expect_response=False)
+        print(self.color)
 
-    # The "stop" method defines what Mycroft does when told to stop during
-    # the skill's execution. In this case, since the skill's functionality
-    # is extremely simple, there is no need to override it.  If you DO
-    # need to implement stop, you should return True to indicate you handled
-    # it.
-    #
-    # def stop(self):
-    #    return False
+    @removes_context('NumberContext')
+    @removes_context('SillyNameMakerContext')
+    def stop(self):
+       pass
 
-# The "create_skill()" method is used to create an instance of the skill.
-# Note that it's outside the class itself.
 def create_skill():
     return SillyNameMakerSkill()
