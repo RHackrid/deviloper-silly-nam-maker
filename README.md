@@ -1,19 +1,14 @@
-To submit your skill, replace this file with text from 
-https://rawgit.com/MycroftAI/mycroft-skills/master/meta_editor.html
-
-
-## YOUR SKILL NAME
-One line description of the skill
+## Silly Name Maker
+Returns a user's silly name by prompting the user for a favorite color and lucky number.
 
 ## Description 
-A more verbose description, including any extra instructions or
-information that didn't fit in the one line.
+Returns a user's silly name by prompting the user for a favorite color and lucky number. It's the first example from Google for Dialogflow.
+See https://developers.google.com/actions/dialogflow/first-app
 
 ## Examples 
-* "Hello world"
-* "Greetings planet earth"
-* "Count up"
-* "Count down"
+* "What is your lucky number?"
+* "What is your favorite color? "
+* "Alright, your silly name is Yellow 5! I hope you like it. "
 
 ## Credits 
-Your name
+RHackrid
