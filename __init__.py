@@ -15,11 +15,11 @@ from mycroft.util.log import LOG
 # from the MycroftSkill class.  You extend this class as shown below.
 
 # TODO: Change "Template" to a unique name for your skill
-class TemplateSkill(MycroftSkill):
+class SillyNameMakerSkill(MycroftSkill):
 
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
-        super(TemplateSkill, self).__init__(name="TemplateSkill")
+        super(SillyNameMakerSkill, self).__init__(name="SillyNameMakerSkill")
         
         # Initialize working variables used within the skill.
         self.count = 0
@@ -35,12 +35,12 @@ class TemplateSkill(MycroftSkill):
     #   'Hello world'
     #   'Howdy you great big world'
     #   'Greetings planet earth'
-    @intent_handler(IntentBuilder("").require("Hello").require("World"))
-    def handle_hello_world_intent(self, message):
+    @intent_handler(IntentBuilder("").require("Color").require("Number"))
+    def handle_silly_name_intent(self, message):
         # In this case, respond by simply speaking a canned response.
         # Mycroft will randomly speak one of the lines from the file
         #    dialogs/en-us/hello.world.dialog
-        self.speak_dialog("hello.world")
+        self.speak_dialog("silly.name.is", data={"color": self.color, "number": self.number})
 
     @intent_handler(IntentBuilder("").require("Count").require("Dir"))
     def handle_count_intent(self, message):
@@ -62,4 +62,4 @@ class TemplateSkill(MycroftSkill):
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
 def create_skill():
-    return TemplateSkill()
+    return SillyNameMakerSkill()
