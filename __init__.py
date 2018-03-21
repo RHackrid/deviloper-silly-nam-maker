@@ -44,6 +44,7 @@ class SillyNameMakerSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("ColorIntent").require("FavoriteColor").require("NumberContext").build())
     @removes_context('NumberContext')
+    @removes_context('SillyNameMakerContext')
     def handle_color(self, message):
         self.color = message.data.get("FavoriteColor")
         self.speak('Alright, your silly name is {} {}! I hope you like it. See you next time.'.format(self.color, self.number), expect_response=False)
