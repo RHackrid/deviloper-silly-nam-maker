@@ -21,9 +21,12 @@
 # SOFTWARE.
 
 from adapt.intent import IntentBuilder
+
+from mycroft.util.log import getLogger
 from mycroft.skills.core import MycroftSkill, intent_handler
-from mycroft.util.log import LOG
 from mycroft.skills.context import *
+
+LOGGER = getLogger(__name__)
 
 class SillyNameMakerSkill(MycroftSkill):
 
@@ -33,22 +36,22 @@ class SillyNameMakerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("SillyNameMakerIntent").require("SillyNameMakerStart").build())
     @adds_context('SillyNameMakerContext')
     def handle_silly_name_maker_start(self, message):
-        self.speak('Hi! Welcome to Silly Name Maker! Lets get started. What is your lucky number?', expect_response=True)
+        self.speak_dialog("hello", expect_response=True)
 		
     @intent_handler(IntentBuilder("NumberIntent").require("LuckyNumber").require("SillyNameMakerContext").build())
     @adds_context('NumberContext')
     def handle_number(self, message):
         self.number = message.data.get("LuckyNumber")
-        self.speak('What is your favorite color?', expect_response=True)
-        print(self.number)
+        self.speak_dialog("question.color", expect_response=True)
+        LOGGER.debug(self.number)
 
     @intent_handler(IntentBuilder("ColorIntent").require("FavoriteColor").require("NumberContext").build())
     @removes_context('NumberContext')
     @removes_context('SillyNameMakerContext')
     def handle_color(self, message):
         self.color = message.data.get("FavoriteColor")
-        self.speak('Alright, your silly name is {} {}! I hope you like it. See you next time.'.format(self.color, self.number), expect_response=False)
-        print(self.color)
+        self.speak_dialog("result", data={"favorite_color": self.color, "lucky_number": self.number})
+        LOGGER.debug(self.color)
 
     @removes_context('NumberContext')
     @removes_context('SillyNameMakerContext')
