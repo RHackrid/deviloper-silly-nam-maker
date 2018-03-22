@@ -6,9 +6,12 @@ Returns a user's silly name by prompting the user for a favorite color and lucky
 See https://developers.google.com/actions/dialogflow/first-app
 
 ## Examples 
-* "What is your lucky number?"
-* "What is your favorite color? "
-* "Alright, your silly name is Yellow 5! I hope you like it. "
+* User: "Start Silly Name Maker."
+* App: "Hi! Welcome to Silly Name Maker! Let's get started. What is your lucky number?"
+* User: "5"
+* App: "What is your favorite color?"
+* User: "Yellow"
+* App: "Alright, your silly name is Yellow 5! I hope you like it. See your next time."
 
 ## Credits 
 RHackrid
