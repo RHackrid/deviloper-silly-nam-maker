@@ -5,7 +5,11 @@ Returns a user's silly name by prompting the user for a favorite color and lucky
 Returns a user's silly name by prompting the user for a favorite color and lucky number. It's the first example from Google for Dialogflow.
 See https://developers.google.com/actions/dialogflow/first-app
 
-## Examples 
+## Example-Intents to triger the skill
+* User: "Start Silly Name Maker."
+* User: "Silly name."
+
+## Example-Dialog
 * User: "Start Silly Name Maker."
 * App: "Hi! Welcome to Silly Name Maker! Let's get started. What is your lucky number?"
 * User: "5"
